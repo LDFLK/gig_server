@@ -9,9 +9,8 @@ from gig.ent_types import ENTITY_TYPE
 
 N_SAMPLES = 5
 
-
-SERVER_NAME, HOST, PORT = None, '127.0.0.1', 5001
-# SERVER_NAME, HOST, PORT = 'gig', '0.0.0.0', 8080
+# SERVER_NAME, HOST, PORT = None, '127.0.0.1', 5001
+SERVER_NAME, HOST, PORT = 'gig', '0.0.0.0', 8080
 # SERVER_NAME, HOST, PORT = 'gig', '18.209.43.63', 80
 
 REGION_ID_SIZE_MAP = {

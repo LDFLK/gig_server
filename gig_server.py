@@ -25,8 +25,7 @@ cache.init_app(app)
 @cache.cached(timeout=DEFUALT_CACHE_TIMEOUT)
 def index():
     """Index."""
-    log_metrics()
-    return {'server': 'geo', 'server_time': time.time()}
+    return log_metrics()
 
 
 @app.route('/entity/<string:entity_id>')
