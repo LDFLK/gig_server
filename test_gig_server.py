@@ -1,6 +1,7 @@
 """Test."""
 import os
 import unittest
+import time
 
 from utils import db
 from utils.flask import FlaskClient
@@ -9,8 +10,8 @@ from gig.ent_types import ENTITY_TYPE
 
 N_SAMPLES = 5
 
-# SERVER_NAME, HOST, PORT = None, '127.0.0.1', 5001
-SERVER_NAME, HOST, PORT = 'gig', '0.0.0.0', 8080
+SERVER_NAME, HOST, PORT = None, '127.0.0.1', 5001
+# SERVER_NAME, HOST, PORT = 'gig', '0.0.0.0', 8080
 # SERVER_NAME, HOST, PORT = 'gig', '18.209.43.63', 80
 
 REGION_ID_SIZE_MAP = {
@@ -25,10 +26,12 @@ class TestGIGServer(unittest.TestCase):
     """Tests."""
 
     def setUp(self):
-        """Setup."""
+        """Set up."""
         if not SERVER_NAME:
-            print('Starting flask...')
+            print('Re-starting flask...')
+            os.system('./local_flask_stop.sh')
             os.system('./local_flask_start.sh &')
+            time.sleep(1)
         self.__client = FlaskClient(SERVER_NAME, HOST, PORT)
 
     def tearDown(self):
@@ -37,10 +40,11 @@ class TestGIGServer(unittest.TestCase):
             print('Stopping flask...')
             os.system('./local_flask_stop.sh')
 
-    def test_entity(self):
+    def test_entities(self):
         """Test."""
-        entity = self.__client.run('entity', ['LK-11'])
-        self.assertEqual(entity['name'], 'Colombo')
+        entities = self.__client.run('entities', ['LK-1;LK-11'])
+        self.assertEqual(len(entities.keys()), 2)
+        self.assertEqual(entities['LK-11']['name'], 'Colombo')
 
     def test_entity_ids(self):
         """Test."""
@@ -60,9 +64,6 @@ class TestGIGServer(unittest.TestCase):
             id_key = db.get_id_key(entity_type)
 
             for entity_id in subset_entity_ids:
-                entity = self.__client.run('entity', [entity_id])
-                self.assertEqual(entity[id_key], entity_id)
-
                 if entity_type not in [
                     ENTITY_TYPE.ED,
                     ENTITY_TYPE.PD,

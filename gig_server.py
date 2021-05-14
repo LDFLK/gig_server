@@ -1,6 +1,4 @@
 """GIGServer."""
-import time
-
 from flask import Flask
 from flask_caching import Cache
 
@@ -28,11 +26,12 @@ def index():
     return log_metrics()
 
 
-@app.route('/entity/<string:entity_id>')
+@app.route('/entities/<string:entity_ids_str>')
 @cache.cached(timeout=DEFUALT_CACHE_TIMEOUT)
-def entity(entity_id):
+def entities(entity_ids_str):
     """Get entity."""
-    return gig.ents.get_entity(entity_id)
+    entity_ids = entity_ids_str.split(';')
+    return gig.ents.multiget_entities(entity_ids)
 
 
 @app.route('/entity_ids/<string:entity_type>')
