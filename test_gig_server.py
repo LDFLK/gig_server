@@ -29,8 +29,8 @@ class TestGIGServer(unittest.TestCase):
         """Set up."""
         if not SERVER_NAME:
             print('Re-starting flask...')
-            os.system('./local_flask_stop.sh')
-            os.system('./local_flask_start.sh &')
+            os.system('./test_local_flask_stop.sh')
+            os.system('./test_local_flask_start.sh &')
             time.sleep(1)
         self.__client = FlaskClient(SERVER_NAME, HOST, PORT)
 
@@ -38,7 +38,7 @@ class TestGIGServer(unittest.TestCase):
         """Teardown."""
         if not SERVER_NAME:
             print('Stopping flask...')
-            os.system('./local_flask_stop.sh')
+            os.system('./test_local_flask_stop.sh')
 
     def test_entities(self):
         """Test."""

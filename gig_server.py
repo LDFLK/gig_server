@@ -61,3 +61,7 @@ def nearby(latlng_str):
 def ext_data(data_group, table_id, entity_id):
     """Get extended data."""
     return gig.ext_data.get_table_data(data_group, table_id, [entity_id])
+
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=4001)

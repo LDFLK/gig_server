@@ -1,7 +1,4 @@
 flask
 flask_caching
-psutil
-requests
 
-utils-nuuuwan
-gig-nuuuwan
+gig-nuuuwan==0.1.9
