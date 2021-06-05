@@ -5,4 +5,5 @@ echo "AWS_EC2_USER=$AWS_EC2_USER"
 EC2_SUDO="ssh -i $AWS_EC2_PEM_FILE $AWS_EC2_USER@$AWS_EC2_IP_ADDRESS sudo "
 
 $EC2_SUDO docker kill aws_gig_server
+$EC2_SUDO docker rm /aws_gig_server
 $EC2_SUDO docker ps
