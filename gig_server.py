@@ -20,9 +20,9 @@ cache.init_app(app)
 # ----------------------------------------------------------------
 
 
-@app.route('/')
+@app.route('/status')
 @cache.cached(timeout=DEFUALT_CACHE_TIMEOUT)
-def index():
+def status():
     """Index."""
     return log_metrics() | {'server': 'gig_server'}
 
