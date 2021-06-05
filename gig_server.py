@@ -8,7 +8,7 @@ import gig.ents
 import gig.nearby
 import gig.ext_data
 
-DEFUALT_CACHE_TIMEOUT = 1
+DEFAULT_CACHE_TIMEOUT = 1
 
 log_metrics()
 app = Flask(__name__)
@@ -21,14 +21,14 @@ cache.init_app(app)
 
 
 @app.route('/status')
-@cache.cached(timeout=DEFUALT_CACHE_TIMEOUT)
+@cache.cached(timeout=DEFAULT_CACHE_TIMEOUT)
 def status():
     """Index."""
     return log_metrics() | {'server': 'gig_server'}
 
 
 @app.route('/entities/<string:entity_ids_str>')
-@cache.cached(timeout=DEFUALT_CACHE_TIMEOUT)
+@cache.cached(timeout=DEFAULT_CACHE_TIMEOUT)
 def entities(entity_ids_str):
     """Get entity."""
     entity_ids = entity_ids_str.split(';')
@@ -36,7 +36,7 @@ def entities(entity_ids_str):
 
 
 @app.route('/entity_ids/<string:entity_type>')
-@cache.cached(timeout=DEFUALT_CACHE_TIMEOUT)
+@cache.cached(timeout=DEFAULT_CACHE_TIMEOUT)
 def entity_ids(entity_type):
     """Get entity IDs."""
     return {
@@ -45,7 +45,7 @@ def entity_ids(entity_type):
 
 
 @app.route('/nearby/<string:latlng_str>')
-@cache.cached(timeout=DEFUALT_CACHE_TIMEOUT)
+@cache.cached(timeout=DEFAULT_CACHE_TIMEOUT)
 def nearby(latlng_str):
     """Get places near latlng."""
     lat, _, lng = latlng_str.partition(',')
@@ -58,7 +58,7 @@ def nearby(latlng_str):
 @app.route(
     '/ext_data/<string:data_group>/<string:table_id>/<string:entity_id>'
 )
-@cache.cached(timeout=DEFUALT_CACHE_TIMEOUT)
+@cache.cached(timeout=DEFAULT_CACHE_TIMEOUT)
 def ext_data(data_group, table_id, entity_id):
     """Get extended data."""
     return gig.ext_data.get_table_data(data_group, table_id, [entity_id])
