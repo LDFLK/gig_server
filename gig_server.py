@@ -2,6 +2,7 @@
 import logging
 from flask import Flask
 from flask_caching import Cache
+from flask_cors import CORS
 
 from utils.sysx import log_metrics
 import gig.ents
@@ -10,8 +11,8 @@ import gig.ext_data
 
 DEFAULT_CACHE_TIMEOUT = 1
 
-log_metrics()
 app = Flask(__name__)
+CORS(app)
 cache = Cache(config={'CACHE_TYPE': 'SimpleCache'})
 cache.init_app(app)
 
@@ -66,6 +67,6 @@ def ext_data(data_group, table_id, entity_id):
 
 if __name__ == '__main__':
     from waitress import serve
-    HOST, PORT = '0.0.0.0', 4001
+    HOST, PORT = '0.0.0.0', 81
     print('Starting %s_server on %s:%d with waitress...' % ('gig', HOST, PORT))
     serve(app, host=HOST, port=PORT, threads=16)
