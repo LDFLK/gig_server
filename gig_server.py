@@ -1,4 +1,5 @@
 """GIGServer."""
+import logging
 from flask import Flask
 from flask_caching import Cache
 
@@ -23,7 +24,7 @@ cache.init_app(app)
 @cache.cached(timeout=DEFUALT_CACHE_TIMEOUT)
 def index():
     """Index."""
-    return log_metrics()
+    return log_metrics() | {'server': 'gig_server'}
 
 
 @app.route('/entities/<string:entity_ids_str>')
@@ -64,4 +65,7 @@ def ext_data(data_group, table_id, entity_id):
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=4001)
+    from waitress import serve
+    HOST, PORT = '0.0.0.0', 4001
+    print('Starting %s_server on %s:%d with waitress...' % ('gig', HOST, PORT))
+    serve(app, host=HOST, port=PORT, threads=16)

@@ -1,4 +1,5 @@
 flask
 flask_caching
+waitress
 
 gig-nuuuwan==0.1.9
