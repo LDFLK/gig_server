@@ -1,97 +1,35 @@
-"""Test."""
-import os
+"""Tests."""
 import unittest
-import time
-
-from utils import db
-from utils.flask import FlaskClient
-
-from gig.ent_types import ENTITY_TYPE
-
-N_SAMPLES = 5
-
-SERVER_NAME, HOST, PORT = None, '127.0.0.1', 5001
-# SERVER_NAME, HOST, PORT = 'gig', '0.0.0.0', 8080
-# SERVER_NAME, HOST, PORT = 'gig', '18.209.43.63', 80
-
-REGION_ID_SIZE_MAP = {
-    'province': 1,
-    'district': 2,
-    'dsd': 4,
-    'gnd': 7,
-}
+import gig_server
 
 
-class TestGIGServer(unittest.TestCase):
+class TestGigServer(unittest.TestCase):
     """Tests."""
 
-    def setUp(self):
-        """Set up."""
-        if not SERVER_NAME:
-            print('Re-starting flask...')
-            os.system('./test_local_flask_stop.sh')
-            os.system('./test_local_flask_start.sh &')
-            time.sleep(1)
-        self.__client = FlaskClient(SERVER_NAME, HOST, PORT)
-
-    def tearDown(self):
-        """Teardown."""
-        if not SERVER_NAME:
-            print('Stopping flask...')
-            os.system('./test_local_flask_stop.sh')
+    def test_status(self):
+        """Test."""
+        status = gig_server.status()
+        self.assertIn('server', status)
 
     def test_entities(self):
         """Test."""
-        entities = self.__client.run('entities', ['LK-1;LK-11'])
-        self.assertEqual(len(entities.keys()), 2)
-        self.assertEqual(entities['LK-11']['name'], 'Colombo')
+        entities = gig_server.entities('LK')
+        self.assertIn('LK', entities)
 
     def test_entity_ids(self):
         """Test."""
-        entity_ids = self.__client.run('entity_ids', ['province'])\
-            .get('entity_ids')
-        self.assertEqual(len(entity_ids), 9)
-
-    def test_ext_data(self):
-        """Test."""
-        entity_ids_map = {}
-        for entity_type in ENTITY_TYPE.list():
-            response = self.__client.run('entity_ids', [entity_type])
-            entity_ids_map[entity_type] = response['entity_ids']
-
-        for entity_type, entity_ids in entity_ids_map.items():
-            subset_entity_ids = entity_ids[:N_SAMPLES]
-            id_key = db.get_id_key(entity_type)
-
-            for entity_id in subset_entity_ids:
-                if entity_type not in [
-                    ENTITY_TYPE.ED,
-                    ENTITY_TYPE.PD,
-                    ENTITY_TYPE.PS,
-                ]:
-                    response = self.__client.run(
-                        'ext_data',
-                        ['census', 'total_population', entity_id],
-                    )
-                    self.assertTrue(
-                        response[entity_id]['total_population'] >= 0,
-                    )
+        province_ids = gig_server.entity_ids('province')['entity_ids']
+        self.assertIn('LK-1', province_ids)
 
     def test_nearby(self):
         """Test."""
-        response = self.__client.run(
-            'nearby',
-            ['6.907560294565226,79.86413013335861'],  # Cinnamon Gaardens PS
+        nearby = gig_server.nearby('8,80')
+        self.assertIn('nearby_entity_info_list', nearby)
 
-        )
-        nearby_entity_info_list = response['nearby_entity_info_list']
-        first_entity = nearby_entity_info_list[0]['entity']
-        self.assertEqual(first_entity['name'], 'Cinnamon Garden')
-
-        # Not in Sri Lanka
-        response = self.__client.run('nearby', ['20,70'])
-        nearby_entity_info_list = response['nearby_entity_info_list']
-        self.assertEqual(nearby_entity_info_list, [])
+    def test_ext_data(self):
+        """Test."""
+        ext_data = gig_server.ext_data('census', 'total_population', 'LK')
+        self.assertIn('LK', ext_data)
 
 
 if __name__ == '__main__':
