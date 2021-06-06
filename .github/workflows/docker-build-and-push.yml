@@ -27,7 +27,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: nuuuwan/gig_server:$(date +%s)
+          tags: nuuuwan/gig_server:latest
           
       -
         name: Image digest
