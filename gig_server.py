@@ -25,7 +25,9 @@ cache.init_app(app)
 @cache.cached(timeout=DEFAULT_CACHE_TIMEOUT)
 def status():
     """Index."""
-    return log_metrics() | {'server': 'gig_server'}
+    data = log_metrics()
+    data['server'] = 'gig_server'
+    return data
 
 
 @app.route('/entities/<string:entity_ids_str>')
