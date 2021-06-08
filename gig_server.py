@@ -68,4 +68,4 @@ def ext_data(data_group, table_id, entity_id):
 
 
 if __name__ == '__main__':
-    app.run(ssl_context=('cert.pem', 'key.pem'))
+    app.run(ssl_context=('test_cert.pem', 'test_key.pem'))
