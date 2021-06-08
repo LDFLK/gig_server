@@ -1,6 +1,6 @@
 flask
 flask_cors
 flask_caching
-waitress
+gunicorn
 
-gig-nuuuwan==0.1.9
+gig-nuuuwan==1.0.0
