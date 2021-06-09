@@ -68,4 +68,10 @@ def ext_data(data_group, table_id, entity_id):
 
 
 if __name__ == '__main__':
-    app.run(ssl_context=('test_cert.pem', 'test_key.pem'))
+    from waitress import serve
+    print('Starting gig_server on waitress...')
+    serve(
+        app,
+        host='0.0.0.0',
+        port=4001,
+    )
