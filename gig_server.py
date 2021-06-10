@@ -11,7 +11,7 @@ import gig.nearby
 import gig.ext_data
 
 DEFAULT_CACHE_TIMEOUT = 120
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 CORS(app)
@@ -72,7 +72,7 @@ def ext_data(data_group, table_id, entity_id):
 if __name__ == '__main__':
     PORT = 4001
     HOST = '0.0.0.0'
-    logging.debug('Starting gig_server on %s:%d...', HOST, PORT)
+    logging.info('Starting gig_server on %s:%d...', HOST, PORT)
     serve(
         app,
         host=HOST,
