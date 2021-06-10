@@ -3,13 +3,15 @@ import logging
 from flask import Flask
 from flask_caching import Cache
 from flask_cors import CORS
+from waitress import serve
 
 from utils.sysx import log_metrics
 import gig.ents
 import gig.nearby
 import gig.ext_data
 
-DEFAULT_CACHE_TIMEOUT = 1
+DEFAULT_CACHE_TIMEOUT = 120
+logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
 CORS(app)
@@ -34,8 +36,8 @@ def status():
 @cache.cached(timeout=DEFAULT_CACHE_TIMEOUT)
 def entities(entity_ids_str):
     """Get entity."""
-    entity_ids = entity_ids_str.split(';')
-    return gig.ents.multiget_entities(entity_ids)
+    _entity_ids = entity_ids_str.split(';')
+    return gig.ents.multiget_entities(_entity_ids)
 
 
 @app.route('/entity_ids/<string:entity_type>')
@@ -68,11 +70,12 @@ def ext_data(data_group, table_id, entity_id):
 
 
 if __name__ == '__main__':
-    from waitress import serve
-    print('Starting gig_server on waitress...')
+    PORT = 4001
+    HOST = '0.0.0.0'
+    logging.debug('Starting gig_server on %s:%d...', HOST, PORT)
     serve(
         app,
-        host='0.0.0.0',
-        port=4001,
-        threads=32,
+        host=HOST,
+        port=PORT,
+        threads=8,
     )
