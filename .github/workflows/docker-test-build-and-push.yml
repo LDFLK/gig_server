@@ -1,9 +1,6 @@
 name: Test, Build and Push Docker
 
-on:
-  push:
-    branches:
-      - 'main'
+on: workflow_dispatch
 
 jobs:
   docker:
