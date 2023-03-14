@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    reloader.stakater.com/auto: "true"
+  labels:
+    app_name: gig-server
+  name: gig-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app_name: gig-server
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app_name: gig-server
+    spec:
+      containers:
+        - image: gigserver.azurecr.io/gig-server
+          imagePullPolicy: Always
+          name: gig-server
+          ports:
+            - containerPort: 4001
+              name: port-4001
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 50m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60
