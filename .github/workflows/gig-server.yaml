@@ -13,6 +13,7 @@ env:
     DEPLOYMENT_MANIFEST_PATH: |
         ./deployment/gig-server-deployment.yml
         ./deployment/gig-server-service.yml
+        ./deployment/gig-server-ingress.yml
 jobs:
     buildImage:
         permissions:
